@@ -14,22 +14,33 @@
   </head>
   <body>
     <h1>jQuery Profile Plugin</h1>
+    <p>jQuery.profile logs calls to <code>jQuery(selector)</code>.
+    Visit the <a href="http://github.com/osteele/jquery-profile/wikis/home">documentation page</a> for additional information.  Download it <a href="http://plugins.jquery.com/project/profile">here.</a></p>
     <div id="output">
       <div id="no-js">Enable JavaScript to use jQuery (d'oh!)</div>
-      <div id="has-console">Look in your browser console for output, or click <a href="?inline-console">here</a> to direct console to this area.</div>
+      <div id="has-console">Look in your browser console for output, or click <a href="?inline-output">here</a> to direct console output to this area of the page.</div>
+      <pre></pre>
     </div>
 
 <script type="text/javascript">//<![CDATA[
 $('#output').addClass('has-js');
-if (window.console && !window.location.search.match(/[\?&]inline-console\b/))
+if (window.console && !window.location.search.match(/[\?&]inline-output\b/))
   $('#output').addClass('has-console');
 else
-  window.console = {info: function(msg) { var div = document.createElement('div'); $(div).text(msg); $('#output').append(div) }};
+  window.console = {info: function(msg) { var div = document.createElement('div'); $(div).text(msg); $('#output pre').append(div) }};
 
 $(function() {
   $.profile.start();
-  for (var i = 0; i < 1000; i++)
+  for (var i = 0; i < 200; i++)
     $('script');
+  for (var i = 0; i < 100; i++)
+    $('#output');
+  for (var i = 0; i < 100; i++)
+    $('html body #output');
+  for (var i = 0; i < 100; i++)
+    $('script, #output');
+  for (var i = 0; i < 100; i++)
+    $('script, script, script, script');
   $.profile.stop();
 });
 //]]></script>

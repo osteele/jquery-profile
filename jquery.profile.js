@@ -1,6 +1,7 @@
 /*
  * JQuery Profile Plugin
  * Version 1.0a1
+ * http://plugins.jquery.com/project/profile
  *
  * Copyright 2008 by Oliver Steele
  * Dual licensed under the MIT and GPL Licenses:
@@ -38,7 +39,7 @@
             stats.sort(function(a, b) {return b.total - a.total});
             var rows = [],
                 ellipsisPattern = new RegExp('(.{'+(options.maxSelectorLength||20)+'}).*');
-            rows.push(['Selector', 'Count', 'Total', 'Avg']);
+            rows.push(['Selector', 'Count', 'Total', 'Avg+/-stddev']);
             for (var i = 0; i < Math.min(options.limit || 10, stats.length); i++) {
                 var entry = stats[i],
                     n = entry.count,
