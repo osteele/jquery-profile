@@ -1,6 +1,6 @@
 /*
  * JQuery Profile Plugin
- * Version 1.0a1
+ * Version 1.0
  * http://plugins.jquery.com/project/profile
  *
  * Copyright 2008 by Oliver Steele
@@ -15,10 +15,10 @@
  * Usage:
  *   jQuery.profile.start();
  *   // do some stuff
- *   jQuery.profile.stop();
+ *   jQuery.profile.done();
  *
  * Or, include ?jquery.profile.start in the url to start profiling when the
- * this script is loaded.  You will still need to call .stop() to see the
+ * this script is loaded.  You will still need to call .done() to see the
  * report.
  *
  * @type jQuery
@@ -26,13 +26,14 @@
  * @author Oliver Steele (steele@osteele.com)
  */
 (function($) {
-    $.profile = start;
+    var profile = $.profile = start;
     
     var stats,
         statsIndex,
         savedInit;
-    var methods = {
-        start: start,
+    $.extend(profile, {
+        done: function() { this.stop(); this.report() },
+        start: start,           // $.extend ignores this, so we set it below
         reset: reset,
         report: function(options) {
             options = options || {};
@@ -50,38 +51,35 @@
                            entry.total + 'ms',
                            (x + (n > 1 ? 'ms+/-' + sd : 'ms')).replace(/(\.\d\d)\d+/g, '$1')]);
             }
-            printTable(rows, {0:{align:'left'}, 3:{align:'left'}});
-            function printTable(rows, options) {
-                var widths = [], padstr = ' ';
-                for (var i = 0; i < rows.length; i++)
-                    for (var j = 0; j < rows[i].length; j++)
-                        widths[j] = Math.max(widths[j]||0, String(rows[i][j]).length);
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i], fields = [];
-                    for (var j = 0; j < row.length; j++) {
-                        var padlen = widths[j] - String(row[j]).length;
-                        while (padstr.length < padlen) padstr += padstr;
-                        var pad = padstr.slice(0, padlen),
-                            left = (options[j]||{}).align == 'left';
-                        left || fields.push(pad);
-                        fields.push(row[j]);
-                        left && fields.push(pad);
-                    }
-                    console.info(fields.join(' '));
+            this.printTable(rows, {0:{align:'left'}, 3:{align:'left'}});
+        },
+        printTable: function(rows, options) {
+            var widths = [], padstr = ' ';
+            for (var i = 0; i < rows.length; i++)
+                for (var j = 0; j < rows[i].length; j++)
+                    widths[j] = Math.max(widths[j]||0, String(rows[i][j]).length);
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i], fields = [];
+                for (var j = 0; j < row.length; j++) {
+                    var padlen = widths[j] - String(row[j]).length;
+                    while (padstr.length < padlen) padstr += padstr;
+                    var pad = padstr.slice(0, padlen),
+                        left = (options[j]||{}).align == 'left';
+                    left || fields.push(pad);
+                    fields.push(row[j]);
+                    left && fields.push(pad);
                 }
+                console.info(fields.join(' '));
             }
         },
         stop: function() {
             if (savedInit) {
                 jQuery.fn.init = savedInit;
                 savedInit = null;
-                this.report();
             }
         }
-    }
-    for (var name in methods)
-        start[name] = methods[name];
-    return start;
+    });
+    profile.start = start;
     
     function start() {
         reset();
