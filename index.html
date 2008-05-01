@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>jQuery Profile Plugin</title>
+    <script type="text/javascript" src="jquery-1.2.1.min.js"></script>
+    <script type="text/javascript" src="jquery.profile.js"></script>
+    <script type="text/javascript" src="jquery.profile.js"></script>
+<style type="text/css">
+   #has-console {display: none}
+   .has-console #has-console {display: block}
+   .has-js #no-js {display: none}
+ </style>
+  </head>
+  <body>
+    <h1>jQuery Profile Plugin</h1>
+    <div id="output">
+      <div id="no-js">Enable JavaScript to use jQuery (d'oh!)</div>
+      <div id="has-console">Look in your browser console for output, or click <a href="?inline-console">here</a> to direct console to this area.</div>
+    </div>
+
+<script type="text/javascript">//<![CDATA[
+$('#output').addClass('has-js');
+if (window.console && !window.location.search.match(/[\?&]inline-console\b/))
+  $('#output').addClass('has-console');
+else
+  window.console = {info: function(msg) { var div = document.createElement('div'); $(div).text(msg); $('#output').append(div) }};
+
+$(function() {
+  $.profile.start();
+  for (var i = 0; i < 1000; i++)
+    $('script');
+  $.profile.stop();
+});
+//]]></script>
+  </body>
+</html>
+
