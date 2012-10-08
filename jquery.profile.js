@@ -86,6 +86,15 @@
 
     function start() {
         reset();
+        
+        $(function () {
+            if (window.location.search.match(/[\?&]jquery.profile.start\b/)) {
+                $(document.body).append(
+                    $("<button onclick='$.profile.done(); $(this).remove();' style='position: absolute; right: 0px; top: 0px; z-index: 9001' />").html("Stop Profiling<br/>(Output to Console)")
+                );
+            }
+        });
+
         savedInit = jQuery.fn.init;
 
         jQuery.fn.init = jQuery.prototype.init = function (selector, context, rootjQuery) {
