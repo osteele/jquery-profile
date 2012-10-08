@@ -8,7 +8,7 @@
 * http://www.opensource.org/licenses/mit-license.php
 * http://www.gnu.org/licenses/gpl.html
 * 
-* 2012-10-08: Updated by Joe Coutcher to support newer versions of jQuery
+* 2012-10-08: Updated by Joe Coutcher to support newer versions of jQuery (tested with 1.7.2...may work with others)
 *             Fork: https://github.com/jcoutch/jquery-profile/
 */
 
